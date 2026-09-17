@@ -1,0 +1,9 @@
+v 4
+file . "bool_tb.vhd" "44a7ea86fb2b3ec56df8c002185e941bcc466e70" "20260914074510.418":
+  entity bool_tb at 22( 942) + 0 on 15;
+  architecture test of bool_tb at 33( 1141) + 0 on 16;
+file . "bool.vhd" "ac35b7f3741732d08eafdae68e4210475c4700bd" "20260914074343.903":
+  entity bool at 22( 904) + 0 on 11;
+  architecture beh of bool at 32( 1210) + 0 on 12;
+  architecture struct_stdcell of bool at 44( 1589) + 0 on 13;
+  architecture fn_stdcell of bool at 61( 1984) + 0 on 14;

@@ -1,0 +1,7 @@
+//.include "boolcheckoff.jsim"
+
+.include "stdcell.jsim"
+
+.subckt bool bfn[3:0] A[31:0] B[31:0] Y[31:0]
+Xy A[31:0] B[31:0] bfn[0]#32 bfn[1]#32 bfn[2]#32 bfn[3]#32 Y[31:0] mux4
+.ends
