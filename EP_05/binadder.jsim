@@ -1,0 +1,252 @@
+// Comment out these two lines when using the module in larger module
+.include "./stdcell.jsim"
+.include "./nominal.jsim"
+********************************
+** Ripple Carry Adders (RCA)
+********************************
+* Generic Constant (Parameter): width -- number of bits of the data
+*------------------------------
+* Module (sub-circuit) Name: RCA#width (RCA followed by the width number)
+*--------------------------
+* Input Ports
+*-------------
+*  A[width-1:0] -- operand 1
+*  B[width-1:0] -- operand 2
+*  ci           -- carry in to LSB
+*----------------
+* Output ports
+*----------------
+*  co           -- carry out from the MSB
+*  S[width-1:0] -- sum
+*-----------------------------------------------------------------
+.subckt rca32 A[31:0] B[31:0] ci co S[31:0]
+Xl A[15:0] 	B[15:0]    ci      C16	S[15:0]	        rca16
+Xh A[31:16] 	B[31:16]   C16     co	S[31:16]	rca16
+.ends
+
+.subckt rca30 A[29:0] B[29:0] ci co S[29:0]
+Xl  A[15:0] 	B[15:0]    ci      C16 	S[15:0]	        rca16
+Xh8 A[23:16] 	B[23:16]   C16     C24	S[23:16]	rca8
+Xh4 A[27:24] 	B[27:24]   C24     C28	S[27:24]	rca4
+Xh2 A[29:28] 	B[29:28]   C28     co	S[29:28]	rca2
+.ends
+
+.subckt rca24 A[23:0] B[23:0] ci co S[23:0]
+Xl A[15:0] 	B[15:0]    ci      C16	S[15:0]	        rca16
+Xh A[23:16] 	B[23:16]   C16     co	S[23:16]	rca8
+.ends
+
+.subckt rca22 A[21:0] B[21:0] ci co S[21:0]
+Xl  A[15:0] 	B[15:0]    ci      C16 	S[15:0]	        rca16
+Xh4 A[19:16] 	B[19:16]   C16     C20	S[19:16]	rca4
+Xh2 A[21:20] 	B[21:20]   C20     co	S[21:20]	rca2
+.ends
+
+.subckt rca16 A[15:0] B[15:0] ci co S[15:0]
+Xl A[7:0] 	B[7:0]     ci	C8	S[7:0]	        rca8
+Xh A[15:8] 	B[15:8]    C8	co	S[15:8]	        rca8
+.ends
+
+.subckt rca8 A[7:0] B[7:0] ci co S[7:0]
+Xl A[3:0] 	B[3:0]     ci	C4	S[3:0]	        rca4
+Xh A[7:4] 	B[7:4]     C4	co	S[7:4]	        rca4
+.ends
+
+.subckt rca4 A[3:0] B[3:0] ci co S[3:0]
+Xl A[1:0] 	B[1:0]     ci	C2	S[1:0]	        rca2
+Xh A[3:2] 	B[3:2]     C2	co	S[3:2]	        rca2
+.ends
+
+.subckt rca2 A[1:0] B[1:0] ci co S[1:0]
+Xl A[0] 	B[0]       ci	C1	S[0]	        fa
+Xh A[1] 	B[1]       C1	co	S[1]	        fa
+.ends
+
+.subckt fa a b ci co s
+Xp1 a b p1 nand2
+Xp2 s1 ci p2 nand2
+Xco p1 p2 co nand2
+Xs1 a  b  s1 xor2
+Xs  s1 ci s  xor2
+.ends
+
+***********************************
+** Carray Select Adder (CSA)
+***********************************
+* Generic Constant (Parameter): width -- number of bits of the data
+*   (width=2,4,8,16,32)
+*------------------------------
+* Module (sub-circuit) Name: CSA#width (CSA followed by the width number)
+*---------------------------
+* Input Ports
+*-------------
+*  A[width-1:0] -- operand 1
+*  B[width-1:0] -- operand 2
+*  ci           -- carry in to LSB
+*----------------
+* Output ports
+*----------------
+*  co           -- carry out from the MSB
+*  S[width-1:0] -- sum
+*-----------------------------------------------------------------
+.subckt csa32 A[31:0] B[31:0] ci co S[31:0]
+Xl  A[15:0] 	B[15:0]    ci	C16	S[15:0]	        csa16
+Xh0 A[31:16] 	B[31:16]   0	ch0	h0[31:16]	csa16
+Xh1 A[31:16] 	B[31:16]   vdd	ch1	h1[31:16]	csa16
+Xh  C16#16	h0[31:16]  h1[31:16] 	S[31:16]	mux2
+Xh_co  C16	ch0        ch1 	        co		mux2
+.ends
+
+.subckt csa16 A[15:0] B[15:0] ci co S[15:0]
+Xl  A[7:0] 	B[7:0]     ci	C8	S[7:0]	        csa8
+Xh0 A[15:8] 	B[15:8]    0	ch0	h0[15:8]	csa8
+Xh1 A[15:8] 	B[15:8]    vdd	ch1	h1[15:8]	csa8
+Xh  C8#8	h0[15:8]   h1[15:8] 	S[15:8]	        mux2
+Xh_co  C8	ch0        ch1 	        co		mux2
+.ends
+
+.subckt csa8 A[7:0] B[7:0] ci co S[7:0]
+Xl  A[3:0] 	B[3:0]     ci	C4	S[3:0]	        csa4
+Xh0 A[7:4] 	B[7:4]     0	ch0	h0[7:4]	        csa4
+Xh1 A[7:4] 	B[7:4]     vdd	ch1	h1[7:4]	        csa4
+Xh  C4#4	h0[7:4]    h1[7:4] 	S[7:4]	        mux2
+Xh_co  C4	ch0        ch1 	        co		mux2
+.ends
+
+.subckt csa4 A[3:0] B[3:0] ci co S[3:0]
+Xl  A[1:0] 	B[1:0]     ci	C2	S[1:0]	        csa2
+Xh0 A[3:2] 	B[3:2]     0	ch0	h0[3:2]	        csa2
+Xh1 A[3:2] 	B[3:2]     vdd	ch1	h1[3:2]	        csa2
+Xh  C2#2	h0[3:2]    h1[3:2] 	S[3:2]	        mux2
+Xh_co  C2	ch0        ch1 	        co		mux2
+.ends
+
+.subckt csa2 A[1:0] B[1:0] ci co S[1:0]
+Xl  A[0] 	B[0]       ci	C1	S[0]	        fa
+Xh0 A[1] 	B[1]       0	ch0	h0[1]	        fa
+Xh1 A[1] 	B[1]       vdd	ch1	h1[1]	        fa
+Xh  C1		h0[1]      h1[1] 	S[1]	        mux2
+Xh_co  C1	ch0        ch1 	        co		mux2
+.ends
+
+***********************************
+*** Carry Look Ahead Adder (CLA)
+***********************************
+* Generic Constant (Parameter): width -- number of bits of the data
+*   (width=2,4,8,16,32)
+*----------------------------
+* Module (sub-circuit) Name: CLA#width (CLA followed by the width-1 number), CLA#width_co
+*--------------------------------------------------
+* Input Ports
+*-------------
+*  A[width-1:0] -- operand 1
+*  B[width-1:0] -- operand 2
+*  ci           -- carry in
+*----------------
+* Output ports
+*----------------
+*  S[width-1:0] -- sum
+*  G      -- the generated carry from the root GPC
+*            for connecting as G of GPC when combining the CLAwidth
+*  P      -- the carry propagation control of the root GPC
+*         -- for connecting as cin of GPC when combining the CLAwidth
+*  co (only CLA#width_co) -- carry out from the MSB which is Cwidth
+*         -- this co is ignored when the module is used in signed adder
+*--------------------------------------------------------------------------
+* width=32 (CLA32_o, CLA32)
+* cl=ci
+.subckt cla32_co A[31:0] B[31:0] ci co S[31:0] G P
+Xl   A[15:0]    B[15:0]    cl           S[15:0]	gl   pl          cla16
+Xh   A[31:16]   B[31:16]   ch    co     S[31:16] 	gh   ph          cla16_co
+Xgpc gh		ph         gl    pl     ci   ch     cl   G   P   gpc
+.ends
+.subckt cla32 A[31:0] B[31:0] ci S[31:0] G P
+Xl   A[15:0]    B[15:0]    cl           S[15:0]	gl   pl          cla16
+Xh   A[31:16]   B[31:16]   ch           S[31:16] 	gh   ph          cla16
+Xgpc gh		ph         gl    pl     ci   ch     cl   G   P   gpc
+.ends
+
+* width=16 (CLA16_o, CLA16)
+* cl=ci
+.subckt cla16_co A[15:0] B[15:0] ci co S[15:0] G P
+Xl   A[7:0]     B[7:0]     cl           S[7:0]	gl   pl          cla8
+Xh   A[15:8]    B[15:8]    ch    co     S[15:8] 	gh   ph          cla8_co
+Xgpc gh		ph         gl    pl     ci   ch     cl   G   P   gpc
+.ends
+.subckt cla16 A[15:0] B[15:0] ci S[15:0] G P
+Xl   A[7:0]     B[7:0]     cl           S[7:0]	gl   pl          cla8
+Xh   A[15:8]    B[15:8]    ch           S[15:8] 	gh   ph          cla8
+Xgpc gh		ph         gl    pl     ci   ch     cl   G   P   gpc
+.ends
+
+* width=8 (CLA8_co, CLA8)
+* cl = ci
+.subckt cla8_co A[7:0] B[7:0] ci co S[7:0] G P
+Xl   A[3:0]     B[3:0]     cl           S[3:0]	gl   pl          cla4
+Xh   A[7:4]     B[7:4]     ch    co     S[7:4] 	gh   ph          cla4_co
+Xgpc gh		ph         gl    pl     ci   ch     cl   G   P   gpc
+.ends
+.subckt cla8 A[7:0] B[7:0] ci S[7:0] G P
+Xl   A[3:0]     B[3:0]     cl           S[3:0]	gl   pl          cla4
+Xh   A[7:4]     B[7:4]     ch           S[7:4] 	gh   ph          cla4
+Xgpc gh		ph         gl    pl     ci   ch     cl   G   P   gpc
+.ends
+
+* width=4 (CLA4_co, CLA4)
+* cl=ci
+.subckt cla4_co A[3:0] B[3:0] ci co S[3:0] G P
+Xl   A[1:0]     B[1:0]     cl           S[1:0]	gl   pl          cla2
+Xh   A[3:2]     B[3:2]     ch    co     S[3:2] 	gh   ph          cla2_co
+Xgpc gh		ph         gl    pl     ci   ch     cl   G   P   gpc
+.ends
+.subckt cla4 A[3:0] B[3:0] ci S[3:0] G P
+Xl   A[1:0]     B[1:0]     cl           S[1:0]	gl   pl          cla2
+Xh   A[3:2]     B[3:2]     ch           S[3:2]   gh   ph         cla2
+Xgpc gh		ph         gl    pl     ci   ch     cl   G   P   gpc
+.ends
+
+* width=2 (CLA2_co, CLA2)
+* cl=ci
+.subckt cla2_co A[1:0] B[1:0] ci co S[1:0] G P
+Xl   A[0]       B[0]       cl           S[0]	gl   pl          fa_GP
+Xh   A[1]       B[1]       ch    co     S[1] 	gh   ph          fa_GP_co
+Xgpc gh		ph         gl    pl     ci   ch     cl   G   P   gpc
+.ends
+.subckt cla2 A[1:0] B[1:0] ci S[1:0] G P
+Xl   A[0]       B[0]       cl           S[0]	gl   pl          fa_GP
+Xh   A[1]       B[1]       ch           S[1] 	gh   ph          fa_GP
+Xgpc gh		ph         gl    pl     ci   ch     cl   G   P   gpc
+.ends
+
+* width=1 (FA_GP, FA_GP_co)
+* 
+.subckt fa_GP a b ci  s G P
+Xg  a b       G and2
+Xs1 a b       P xor2
+Xs  P ci      s xor2
+.ends
+
+.subckt fa_GP_co a b ci co s G P
+Xg  a   b     g_n            nand2
+Xs1 a   b     P              xor2
+Xs  P   ci    s              xor2
+Xgn g_n       g              inverter
+Xn1 ci  p     n1             nand2
+Xco g_n n1    co             nand2
+.ends
+
+* GPC module
+*  cl = ci
+.subckt GPC gh ph gl pl ci ch cl G P
+xch0 gl ch0             inverter
+Xch1 pl ci  ch1         nand2
+Xs1 ch0 ch1 ch          nand2
+Xcl ci  cl              knex
+Xgp gh  ph  gl pl G P   GP
+.ends
+.subckt GP gh ph gl pl G P
+xg0 gh g0     inverter
+Xg1 ph gl g1  nand2
+Xs1 g1 g0 G   nand2
+Xs  ph pl P   and2
+.ends
