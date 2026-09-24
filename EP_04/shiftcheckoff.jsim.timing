@@ -1,0 +1,95 @@
+Timing analysis for C:\ene232\EP_04Shift\EP04_SHIFT_JSIM 1\EP04_SHIFT_JSIM\shiftcheckoff.jsim at Wed Sep 23 20:31:48 ICT 2026
+
+==================================================================
+
+Worst-case tPDs for top-level combinational paths
+
+  tPD from sfn1 to sh28 (2.558ns):
+
+    + 0.000ns = 0.000ns sfn1 [wfn#0]
+    + 1.762ns = 1.762ns xshift.msb_in [xshift.xmsb.xmux2]
+    + 0.298ns = 2.060ns xshift.shr028 [xshift.xshr0#3.xmux4]
+    + 0.235ns = 2.295ns xshift.shr128 [xshift.xshr1#3.xmux4]
+    + 0.143ns = 2.438ns xshift.yr28 [xshift.xyr#3.xmux2]
+    + 0.120ns = 2.558ns sh28 [xshift.xy#3.xmux2]
+
+  tPD from sfn1 to sh27 (2.558ns):
+
+    + 0.000ns = 0.000ns sfn1 [wfn#0]
+    + 1.762ns = 1.762ns xshift.msb_in [xshift.xmsb.xmux2]
+    + 0.298ns = 2.060ns xshift.shr027 [xshift.xshr0#4.xmux4]
+    + 0.235ns = 2.295ns xshift.shr127 [xshift.xshr1#4.xmux4]
+    + 0.143ns = 2.438ns xshift.yr27 [xshift.xyr#4.xmux2]
+    + 0.120ns = 2.558ns sh27 [xshift.xy#4.xmux2]
+
+  tPD from sfn1 to sh26 (2.558ns):
+
+    + 0.000ns = 0.000ns sfn1 [wfn#0]
+    + 1.762ns = 1.762ns xshift.msb_in [xshift.xmsb.xmux2]
+    + 0.298ns = 2.060ns xshift.shr026 [xshift.xshr0#5.xmux4]
+    + 0.235ns = 2.295ns xshift.shr126 [xshift.xshr1#5.xmux4]
+    + 0.143ns = 2.438ns xshift.yr26 [xshift.xyr#5.xmux2]
+    + 0.120ns = 2.558ns sh26 [xshift.xy#5.xmux2]
+
+  tPD from sfn1 to sh25 (2.558ns):
+
+    + 0.000ns = 0.000ns sfn1 [wfn#0]
+    + 1.762ns = 1.762ns xshift.msb_in [xshift.xmsb.xmux2]
+    + 0.298ns = 2.060ns xshift.shr025 [xshift.xshr0#6.xmux4]
+    + 0.235ns = 2.295ns xshift.shr125 [xshift.xshr1#6.xmux4]
+    + 0.143ns = 2.438ns xshift.yr25 [xshift.xyr#6.xmux2]
+    + 0.120ns = 2.558ns sh25 [xshift.xy#6.xmux2]
+
+  tPD from sfn1 to sh29 (2.558ns):
+
+    + 0.000ns = 0.000ns sfn1 [wfn#0]
+    + 1.762ns = 1.762ns xshift.msb_in [xshift.xmsb.xmux2]
+    + 0.298ns = 2.060ns xshift.shr029 [xshift.xshr0#2.xmux4]
+    + 0.235ns = 2.295ns xshift.shr129 [xshift.xshr1#2.xmux4]
+    + 0.143ns = 2.438ns xshift.yr29 [xshift.xyr#2.xmux2]
+    + 0.120ns = 2.558ns sh29 [xshift.xy#2.xmux2]
+
+  tPD from sfn1 to sh20 (2.558ns):
+
+    + 0.000ns = 0.000ns sfn1 [wfn#0]
+    + 1.762ns = 1.762ns xshift.msb_in [xshift.xmsb.xmux2]
+    + 0.298ns = 2.060ns xshift.shr020 [xshift.xshr0#11.xmux4]
+    + 0.235ns = 2.295ns xshift.shr120 [xshift.xshr1#11.xmux4]
+    + 0.143ns = 2.438ns xshift.yr20 [xshift.xyr#11.xmux2]
+    + 0.120ns = 2.558ns sh20 [xshift.xy#11.xmux2]
+
+  tPD from sfn1 to sh24 (2.558ns):
+
+    + 0.000ns = 0.000ns sfn1 [wfn#0]
+    + 1.762ns = 1.762ns xshift.msb_in [xshift.xmsb.xmux2]
+    + 0.298ns = 2.060ns xshift.shr024 [xshift.xshr0#7.xmux4]
+    + 0.235ns = 2.295ns xshift.shr124 [xshift.xshr1#7.xmux4]
+    + 0.143ns = 2.438ns xshift.yr24 [xshift.xyr#7.xmux2]
+    + 0.120ns = 2.558ns sh24 [xshift.xy#7.xmux2]
+
+  tPD from sfn1 to sh23 (2.558ns):
+
+    + 0.000ns = 0.000ns sfn1 [wfn#0]
+    + 1.762ns = 1.762ns xshift.msb_in [xshift.xmsb.xmux2]
+    + 0.298ns = 2.060ns xshift.shr023 [xshift.xshr0#8.xmux4]
+    + 0.235ns = 2.295ns xshift.shr123 [xshift.xshr1#8.xmux4]
+    + 0.143ns = 2.438ns xshift.yr23 [xshift.xyr#8.xmux2]
+    + 0.120ns = 2.558ns sh23 [xshift.xy#8.xmux2]
+
+  tPD from sfn1 to sh22 (2.558ns):
+
+    + 0.000ns = 0.000ns sfn1 [wfn#0]
+    + 1.762ns = 1.762ns xshift.msb_in [xshift.xmsb.xmux2]
+    + 0.298ns = 2.060ns xshift.shr022 [xshift.xshr0#9.xmux4]
+    + 0.235ns = 2.295ns xshift.shr122 [xshift.xshr1#9.xmux4]
+    + 0.143ns = 2.438ns xshift.yr22 [xshift.xyr#9.xmux2]
+    + 0.120ns = 2.558ns sh22 [xshift.xy#9.xmux2]
+
+  tPD from sfn1 to sh21 (2.558ns):
+
+    + 0.000ns = 0.000ns sfn1 [wfn#0]
+    + 1.762ns = 1.762ns xshift.msb_in [xshift.xmsb.xmux2]
+    + 0.298ns = 2.060ns xshift.shr021 [xshift.xshr0#10.xmux4]
+    + 0.235ns = 2.295ns xshift.shr121 [xshift.xshr1#10.xmux4]
+    + 0.143ns = 2.438ns xshift.yr21 [xshift.xyr#10.xmux2]
+    + 0.120ns = 2.558ns sh21 [xshift.xy#10.xmux2]
