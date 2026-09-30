@@ -1,0 +1,28 @@
+// Comment out these two lines when using the module in larger module (s.a. ubeta)
+.include "stdcell.jsim"
+.include "nominal.jsim"
+
+// * Include files of alu's sub-modules
+// make sure to comment out the .include of stdcell.jsim and nominal.jsim
+.include "arith32.jsim" 
+.include "cmp.jsim"
+.include "bool.jsim"
+.include "shift.jsim"
+
+//*---- begin ALU -----------
+
+.subckt ALU alufn[5:0] A[31:0] B[31:0] Y[31:0] Z V N
+
+Xbool   alufn[3:0] A[31:0] B[31:0] Ybool[31:0] bool
+
+Xshift  alufn[1:0] A[31:0] B[4:0] Yshift[31:0] shift
+
+Xarith alufn[0] A[31:0] B[31:0] Yarith[31:0] Z V N arith_csa
+
+Xcmp    alufn[2:1] Z V N Ycmp[31:0] cmp
+
+Xy      alufn[5]#32 alufn[4]#32 Ycmp[31:0] Yarith[31:0] Ybool[31:0] Yshift[31:0] Y[31:0] mux4
+
+.ends
+
+//*---- end ALU -----------

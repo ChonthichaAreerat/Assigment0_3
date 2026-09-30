@@ -1,0 +1,11 @@
+// Comment out these two lines when using the module in larger module (s.a. ubeta)
+// .include "stdcell.jsim"
+// .include "nominal.jsim"
+
+.subckt cmp cfn[1:0] Z V N Y[31:0]
+Xlt N V lt xor2
+Xleq Z lt leq or2
+Xd0 d0 constant0
+Xout cfn[0] cfn[1] d0 Z lt leq Y[0] mux4
+Xgnd Y[31:1] constant0 
+.ends

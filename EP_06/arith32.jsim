@@ -1,0 +1,88 @@
+// Comment out these two lines when using the module in larger module (s.a. alu)
+// .include "nominal.jsim"
+// .include "stdcell.jsim"
+
+// include 32-bit binary adders (rca32, csa32, cla32) and zero checking modules (iszero32)
+.include "binadder.jsim"
+.include "iszero32.jsim"
+
+*************************************************************************
+* JSIM sub-circuit of arith_rca targeting standard cells in stdcell.jsim
+*************************************************************************
+.subckt arith_rca afn A[31:0] B[31:0] Y[31:0] Z V N
+
+// design#1:ripple-carry adder
+Xbinadd A[31:0] XB[31:0] afn c32 s[31:0] rca32
+
+// Use xor2 to selectively invert B[31:0]
+Xb B[31:0] afn#32 XB[31:0] xor2
+
+// V flag
+Xa31n A[31] a31n inverter
+Xb31n XB[31] b31n inverter
+Xs31n S[31] s31n inverter
+Xv0 A[31] XB[31] s31n v0 nand3
+Xv1 a31n b31n S[31] v1 nand3
+Xv v0 v1 V nand2
+// Z flag
+Xz S[31:0] Z iszero32
+// N flag
+Xn S[31] N knex
+// output
+Xs S[31:0] Y[31:0] knex
+
+.ends
+
+*************************************************************************
+* JSIM sub-circuit of arith_csa targeting standard cells in stdcell.jsim
+*************************************************************************
+.subckt arith_csa afn A[31:0] B[31:0] Y[31:0] Z V N
+
+// design#2: carry-select adder
+Xbinadd A[31:0] XB[31:0] afn c32 s[31:0] csa32
+
+// Use xor2 to selectively invert B[31:0]
+Xb B[31:0] afn#32 XB[31:0] xor2
+
+// V flag
+Xa31n A[31] a31n inverter
+Xb31n XB[31] b31n inverter
+Xs31n S[31] s31n inverter
+Xv0 A[31] XB[31] s31n v0 nand3
+Xv1 a31n b31n S[31] v1 nand3
+Xv v0 v1 V nand2
+// Z flag
+Xz S[31:0] Z iszero32
+// N flag
+Xn S[31] N knex
+// output
+Xs S[31:0] Y[31:0] knex
+
+.ends
+
+*************************************************************************
+* JSIM sub-circuit of arith_cla targeting standard cells in stdcell.jsim
+*************************************************************************
+.subckt arith_cla afn A[31:0] B[31:0] Y[31:0] Z V N
+
+// design#3: caryy-look-ahead adder
+Xbinadd A[31:0] XB[31:0] afn S[31:0] g p cla32
+
+// Use xor2 to selectively invert B[31:0]
+Xb B[31:0] afn#32 XB[31:0] xor2
+
+// V flag
+Xa31n A[31] a31n inverter
+Xb31n XB[31] b31n inverter
+Xs31n S[31] s31n inverter
+Xv0 A[31] XB[31] s31n v0 nand3
+Xv1 a31n b31n S[31] v1 nand3
+Xv v0 v1 V nand2
+// Z flag
+Xz S[31:0] Z iszero32
+// N flag
+Xn S[31] N knex
+// output
+Xs S[31:0] Y[31:0] knex
+
+.ends

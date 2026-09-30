@@ -1,0 +1,150 @@
+Timing analysis for C:\ene232\EP_06\EP06_ALU_JSIM\EP06_ALU_JSIM\alu32checkoff.jsim at Fri Sep 25 01:36:17 ICT 2026
+
+==================================================================
+
+Worst-case tPDs for top-level combinational paths
+
+  tPD from b15 to alu0 (2.876ns):
+
+    + 0.000ns = 0.000ns b15 [wb#16]
+    + 0.176ns = 0.176ns xalu.xarith.xb15 [xalu.xarith.xb#16.xxor2]
+    + 0.194ns = 0.370ns xalu.xarith.xbinadd.xl.xh.xh.xh.ph [xalu.xarith.xbinadd.xl.xh.xh.xh.xh.xs1.xxor2]
+    + 0.147ns = 0.517ns xalu.xarith.xbinadd.xl.xh.xh.ph [xalu.xarith.xbinadd.xl.xh.xh.xh.xgpc.xgp.xs.xand2]
+    + 0.147ns = 0.664ns xalu.xarith.xbinadd.xl.xh.ph [xalu.xarith.xbinadd.xl.xh.xh.xgpc.xgp.xs.xand2]
+    + 0.147ns = 0.811ns xalu.xarith.xbinadd.xl.ph [xalu.xarith.xbinadd.xl.xh.xgpc.xgp.xs.xand2]
+    + 0.147ns = 0.958ns xalu.xarith.xbinadd.pl [xalu.xarith.xbinadd.xl.xgpc.xgp.xs.xand2]
+    + 0.048ns = 1.006ns xalu.xarith.xbinadd.xgpc.ch1 [xalu.xarith.xbinadd.xgpc.xch1.xnand2]
+    + 0.129ns = 1.135ns xalu.xarith.xbinadd.ch [xalu.xarith.xbinadd.xgpc.xs1.xnand2]
+    + 0.048ns = 1.183ns xalu.xarith.xbinadd.xh.xgpc.ch1 [xalu.xarith.xbinadd.xh.xgpc.xch1.xnand2]
+    + 0.111ns = 1.294ns xalu.xarith.xbinadd.xh.ch [xalu.xarith.xbinadd.xh.xgpc.xs1.xnand2]
+    + 0.048ns = 1.342ns xalu.xarith.xbinadd.xh.xh.xgpc.ch1 [xalu.xarith.xbinadd.xh.xh.xgpc.xch1.xnand2]
+    + 0.093ns = 1.435ns xalu.xarith.xbinadd.xh.xh.ch [xalu.xarith.xbinadd.xh.xh.xgpc.xs1.xnand2]
+    + 0.048ns = 1.483ns xalu.xarith.xbinadd.xh.xh.xh.xgpc.ch1 [xalu.xarith.xbinadd.xh.xh.xh.xgpc.xch1.xnand2]
+    + 0.075ns = 1.558ns xalu.xarith.xbinadd.xh.xh.xh.ch [xalu.xarith.xbinadd.xh.xh.xh.xgpc.xs1.xnand2]
+    + 0.048ns = 1.606ns xalu.xarith.xbinadd.xh.xh.xh.xh.xgpc.ch1 [xalu.xarith.xbinadd.xh.xh.xh.xh.xgpc.xch1.xnand2]
+    + 0.057ns = 1.663ns xalu.xarith.xbinadd.xh.xh.xh.xh.ch [xalu.xarith.xbinadd.xh.xh.xh.xh.xgpc.xs1.xnand2]
+    + 0.271ns = 1.934ns xalu.xarith.s31 [xalu.xarith.xbinadd.xh.xh.xh.xh.xh.xs.xxor2]
+    + 0.167ns = 2.101ns xalu.xarith.xz.l07 [xalu.xarith.xz.xl07.xnor4]
+    + 0.088ns = 2.189ns xalu.xarith.xz.l21 [xalu.xarith.xz.xl11.xnand4]
+    + 0.104ns = 2.292ns z [xalu.xarith.xz.xl2.xnor2]
+    + 0.177ns = 2.469ns xalu.xcmp.leq [xalu.xcmp.xleq.xor2]
+    + 0.217ns = 2.686ns xalu.ycmp0 [xalu.xcmp.xout.xmux4]
+    + 0.190ns = 2.876ns alu0 [xalu.xy#31.xmux4]
+
+  tPD from b15 to alu31 (2.124ns):
+
+    + 0.000ns = 0.000ns b15 [wb#16]
+    + 0.176ns = 0.176ns xalu.xarith.xb15 [xalu.xarith.xb#16.xxor2]
+    + 0.194ns = 0.370ns xalu.xarith.xbinadd.xl.xh.xh.xh.ph [xalu.xarith.xbinadd.xl.xh.xh.xh.xh.xs1.xxor2]
+    + 0.147ns = 0.517ns xalu.xarith.xbinadd.xl.xh.xh.ph [xalu.xarith.xbinadd.xl.xh.xh.xh.xgpc.xgp.xs.xand2]
+    + 0.147ns = 0.664ns xalu.xarith.xbinadd.xl.xh.ph [xalu.xarith.xbinadd.xl.xh.xh.xgpc.xgp.xs.xand2]
+    + 0.147ns = 0.811ns xalu.xarith.xbinadd.xl.ph [xalu.xarith.xbinadd.xl.xh.xgpc.xgp.xs.xand2]
+    + 0.147ns = 0.958ns xalu.xarith.xbinadd.pl [xalu.xarith.xbinadd.xl.xgpc.xgp.xs.xand2]
+    + 0.048ns = 1.006ns xalu.xarith.xbinadd.xgpc.ch1 [xalu.xarith.xbinadd.xgpc.xch1.xnand2]
+    + 0.129ns = 1.135ns xalu.xarith.xbinadd.ch [xalu.xarith.xbinadd.xgpc.xs1.xnand2]
+    + 0.048ns = 1.183ns xalu.xarith.xbinadd.xh.xgpc.ch1 [xalu.xarith.xbinadd.xh.xgpc.xch1.xnand2]
+    + 0.111ns = 1.294ns xalu.xarith.xbinadd.xh.ch [xalu.xarith.xbinadd.xh.xgpc.xs1.xnand2]
+    + 0.048ns = 1.342ns xalu.xarith.xbinadd.xh.xh.xgpc.ch1 [xalu.xarith.xbinadd.xh.xh.xgpc.xch1.xnand2]
+    + 0.093ns = 1.435ns xalu.xarith.xbinadd.xh.xh.ch [xalu.xarith.xbinadd.xh.xh.xgpc.xs1.xnand2]
+    + 0.048ns = 1.483ns xalu.xarith.xbinadd.xh.xh.xh.xgpc.ch1 [xalu.xarith.xbinadd.xh.xh.xh.xgpc.xch1.xnand2]
+    + 0.075ns = 1.558ns xalu.xarith.xbinadd.xh.xh.xh.ch [xalu.xarith.xbinadd.xh.xh.xh.xgpc.xs1.xnand2]
+    + 0.048ns = 1.606ns xalu.xarith.xbinadd.xh.xh.xh.xh.xgpc.ch1 [xalu.xarith.xbinadd.xh.xh.xh.xh.xgpc.xch1.xnand2]
+    + 0.057ns = 1.663ns xalu.xarith.xbinadd.xh.xh.xh.xh.ch [xalu.xarith.xbinadd.xh.xh.xh.xh.xgpc.xs1.xnand2]
+    + 0.271ns = 1.934ns xalu.xarith.s31 [xalu.xarith.xbinadd.xh.xh.xh.xh.xh.xs.xxor2]
+    + 0.190ns = 2.124ns alu31 [xalu.xy#0.xmux4]
+
+  tPD from alufn1 to alu14 (1.957ns):
+
+    + 0.000ns = 0.000ns alufn1 [wc#4]
+    + 0.818ns = 0.818ns xalu.xshift.sb [xalu.xshift.xsb.xmux2]
+    + 0.165ns = 0.983ns xalu.xshift.q122 [xalu.xshift.xq1#9.xmux2]
+    + 0.165ns = 1.148ns xalu.xshift.r114 [xalu.xshift.xr1#17.xmux2]
+    + 0.165ns = 1.313ns xalu.xshift.s114 [xalu.xshift.xs1#17.xmux2]
+    + 0.165ns = 1.478ns xalu.xshift.t114 [xalu.xshift.xt1#17.xmux2]
+    + 0.143ns = 1.620ns xalu.xshift.sr14 [xalu.xshift.xsr#17.xmux2]
+    + 0.147ns = 1.767ns xalu.yshift14 [xalu.xshift.xy#17.xmux2]
+    + 0.190ns = 1.957ns alu14 [xalu.xy#17.xmux4]
+
+  tPD from alufn1 to alu10 (1.957ns):
+
+    + 0.000ns = 0.000ns alufn1 [wc#4]
+    + 0.818ns = 0.818ns xalu.xshift.sb [xalu.xshift.xsb.xmux2]
+    + 0.165ns = 0.983ns xalu.xshift.q118 [xalu.xshift.xq1#13.xmux2]
+    + 0.165ns = 1.148ns xalu.xshift.r110 [xalu.xshift.xr1#21.xmux2]
+    + 0.165ns = 1.313ns xalu.xshift.s110 [xalu.xshift.xs1#21.xmux2]
+    + 0.165ns = 1.478ns xalu.xshift.t110 [xalu.xshift.xt1#21.xmux2]
+    + 0.143ns = 1.620ns xalu.xshift.sr10 [xalu.xshift.xsr#21.xmux2]
+    + 0.147ns = 1.767ns xalu.yshift10 [xalu.xshift.xy#21.xmux2]
+    + 0.190ns = 1.957ns alu10 [xalu.xy#21.xmux4]
+
+  tPD from alufn1 to alu29 (1.957ns):
+
+    + 0.000ns = 0.000ns alufn1 [wc#4]
+    + 0.818ns = 0.818ns xalu.xshift.sb [xalu.xshift.xsb.xmux2]
+    + 0.165ns = 0.983ns xalu.xshift.q129 [xalu.xshift.xq1#2.xmux2]
+    + 0.165ns = 1.148ns xalu.xshift.r129 [xalu.xshift.xr1#2.xmux2]
+    + 0.165ns = 1.313ns xalu.xshift.s129 [xalu.xshift.xs1#2.xmux2]
+    + 0.165ns = 1.478ns xalu.xshift.t129 [xalu.xshift.xt1#2.xmux2]
+    + 0.143ns = 1.620ns xalu.xshift.sr29 [xalu.xshift.xsr#2.xmux2]
+    + 0.147ns = 1.767ns xalu.yshift29 [xalu.xshift.xy#2.xmux2]
+    + 0.190ns = 1.957ns alu29 [xalu.xy#2.xmux4]
+
+  tPD from alufn1 to alu2 (1.957ns):
+
+    + 0.000ns = 0.000ns alufn1 [wc#4]
+    + 0.818ns = 0.818ns xalu.xshift.sb [xalu.xshift.xsb.xmux2]
+    + 0.165ns = 0.983ns xalu.xshift.q116 [xalu.xshift.xq1#15.xmux2]
+    + 0.165ns = 1.148ns xalu.xshift.r18 [xalu.xshift.xr1#23.xmux2]
+    + 0.165ns = 1.313ns xalu.xshift.s14 [xalu.xshift.xs1#27.xmux2]
+    + 0.165ns = 1.478ns xalu.xshift.t12 [xalu.xshift.xt1#29.xmux2]
+    + 0.143ns = 1.620ns xalu.xshift.sr2 [xalu.xshift.xsr#29.xmux2]
+    + 0.147ns = 1.767ns xalu.yshift2 [xalu.xshift.xy#29.xmux2]
+    + 0.190ns = 1.957ns alu2 [xalu.xy#29.xmux4]
+
+  tPD from alufn1 to alu15 (1.957ns):
+
+    + 0.000ns = 0.000ns alufn1 [wc#4]
+    + 0.818ns = 0.818ns xalu.xshift.sb [xalu.xshift.xsb.xmux2]
+    + 0.165ns = 0.983ns xalu.xshift.q123 [xalu.xshift.xq1#8.xmux2]
+    + 0.165ns = 1.148ns xalu.xshift.r115 [xalu.xshift.xr1#16.xmux2]
+    + 0.165ns = 1.313ns xalu.xshift.s115 [xalu.xshift.xs1#16.xmux2]
+    + 0.165ns = 1.478ns xalu.xshift.t115 [xalu.xshift.xt1#16.xmux2]
+    + 0.143ns = 1.620ns xalu.xshift.sr15 [xalu.xshift.xsr#16.xmux2]
+    + 0.147ns = 1.767ns xalu.yshift15 [xalu.xshift.xy#16.xmux2]
+    + 0.190ns = 1.957ns alu15 [xalu.xy#16.xmux4]
+
+  tPD from alufn1 to alu30 (1.957ns):
+
+    + 0.000ns = 0.000ns alufn1 [wc#4]
+    + 0.818ns = 0.818ns xalu.xshift.sb [xalu.xshift.xsb.xmux2]
+    + 0.165ns = 0.983ns xalu.xshift.q130 [xalu.xshift.xq1#1.xmux2]
+    + 0.165ns = 1.148ns xalu.xshift.r130 [xalu.xshift.xr1#1.xmux2]
+    + 0.165ns = 1.313ns xalu.xshift.s130 [xalu.xshift.xs1#1.xmux2]
+    + 0.165ns = 1.478ns xalu.xshift.t130 [xalu.xshift.xt1#1.xmux2]
+    + 0.143ns = 1.620ns xalu.xshift.sr30 [xalu.xshift.xsr#1.xmux2]
+    + 0.147ns = 1.767ns xalu.yshift30 [xalu.xshift.xy#1.xmux2]
+    + 0.190ns = 1.957ns alu30 [xalu.xy#1.xmux4]
+
+  tPD from alufn1 to alu11 (1.957ns):
+
+    + 0.000ns = 0.000ns alufn1 [wc#4]
+    + 0.818ns = 0.818ns xalu.xshift.sb [xalu.xshift.xsb.xmux2]
+    + 0.165ns = 0.983ns xalu.xshift.q119 [xalu.xshift.xq1#12.xmux2]
+    + 0.165ns = 1.148ns xalu.xshift.r111 [xalu.xshift.xr1#20.xmux2]
+    + 0.165ns = 1.313ns xalu.xshift.s111 [xalu.xshift.xs1#20.xmux2]
+    + 0.165ns = 1.478ns xalu.xshift.t111 [xalu.xshift.xt1#20.xmux2]
+    + 0.143ns = 1.620ns xalu.xshift.sr11 [xalu.xshift.xsr#20.xmux2]
+    + 0.147ns = 1.767ns xalu.yshift11 [xalu.xshift.xy#20.xmux2]
+    + 0.190ns = 1.957ns alu11 [xalu.xy#20.xmux4]
+
+  tPD from alufn1 to alu6 (1.957ns):
+
+    + 0.000ns = 0.000ns alufn1 [wc#4]
+    + 0.818ns = 0.818ns xalu.xshift.sb [xalu.xshift.xsb.xmux2]
+    + 0.165ns = 0.983ns xalu.xshift.q118 [xalu.xshift.xq1#13.xmux2]
+    + 0.165ns = 1.148ns xalu.xshift.r110 [xalu.xshift.xr1#21.xmux2]
+    + 0.165ns = 1.313ns xalu.xshift.s16 [xalu.xshift.xs1#25.xmux2]
+    + 0.165ns = 1.478ns xalu.xshift.t16 [xalu.xshift.xt1#25.xmux2]
+    + 0.143ns = 1.620ns xalu.xshift.sr6 [xalu.xshift.xsr#25.xmux2]
+    + 0.147ns = 1.767ns xalu.yshift6 [xalu.xshift.xy#25.xmux2]
+    + 0.190ns = 1.957ns alu6 [xalu.xy#25.xmux4]

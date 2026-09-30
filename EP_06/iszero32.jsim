@@ -1,0 +1,19 @@
+// Comment out these two lines when using the module in larger module
+// .include "stdcell.jsim"
+// .include "nominal.jsim"
+
+// Checking whether or not the 32-bit input data is all zeros
+//
+.subckt iszero32 A[31:0] Z
+Xl00 A[3:0] l00 nor4
+Xl01 A[7:4] l01 nor4
+Xl02 A[11:8] l02 nor4
+Xl03 A[15:12] l03 nor4
+Xl04 A[19:16] l04 nor4
+Xl05 A[23:20] l05 nor4
+Xl06 A[27:24] l06 nor4
+Xl07 A[31:28] l07 nor4
+Xl10 l00 l01 l02 l03 l20 nand4
+Xl11 l04 l05 l06 l07 l21 nand4
+Xl2 l20 l21 Z nor2
+.ends
