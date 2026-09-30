@@ -1,0 +1,108 @@
+// Comment out these two lines when using the module in larger module (e.g. rf32x32)
+//.include "./stdcell.jsim"
+//.include "./nominal.jsim"
+
+***********************************
+* 2-to-4 decoder
+*----------------------------------
+.subckt dec2to4 en a[1:0] Y[3:0]
+Xan 	a[1:0]  	an[1:0] inverter	// bitwise inverter
+Xenn	en		enn	inverter	// inverting en
+Xz0 	an[1:0]      	z[0] 	nand2		
+Xz1 	an[1] a[0]      z[1] 	nand2			
+Xz2 	a[1] an[0]      z[2] 	nand2			
+Xz3 	a[1:0] 		z[3] 	nand2	
+Xy	enn#4  z[3:0]	y[3:0]	nor2		//
+.ends
+
+***********************************
+* 3-to-8 decoder
+*----------------------------------
+.subckt dec3to8 en a[2:0] y[7:0]
+Xan 	a[2:0]  		an[2:0] inverter	// bitwise inverter
+Xenn	en			enn	inverter	// inverting en
+Xz0 	an[2:0]      		z[0] 	nand3		// z0 = not (a[2]'.a[1]'.a[0]')
+Xz1 	an[2:1] a[0]		z[1]	nand3		// z1 = not (a[2]'.a[1]'a[0])
+Xz2 	an[2] a[1] an[0] 	z[2] 	nand3		// 
+Xz3 	an[2] a[1] a[0]		z[3] 	nand3		// 
+Xz4 	a[2]  an[1:0]      	z[4]	nand3		// z4 = not (a[2].a[1]'a[0]')
+Xz5 	a[2]  an[1] a[0]	z[5] 	nand3		// z5 = not (a[2].a[1]'.a[0])
+Xz6 	a[2]  a[1] an[0] 	z[6]	nand3		// 
+Xz7 	a[2]  a[1] a[0]		z[7] 	nand3		// 
+
+Xy	enn#8	z[7:0]		y[7:0]	nor2		// 
+.ends
+
+***********************************
+* 4-to-16 decoder
+*----------------------------------
+.subckt dec4to16 en a[3:0] y[15:0]
+Xan 	a[3:0]  		an[3:0] inverter	// bitwise inverter
+Xenn	en			enn	inverter	// inverting en
+Xz0 	an[3:0]      		z[0] 	nand4		// 
+Xz1 	an[3:1] a[0]  		z[1]	nand4		// 
+Xz2 	an[3:2] a[1] an[0]  	z[2]	nand4		// 
+Xz3 	an[3:2] a[1] a[0]  	z[3] 	nand4		// 
+Xz4 	an[3] a[2] an[1:0]	z[4]	nand4		// 
+Xz5 	an[3] a[2] an[1] a[0]  	z[5]	nand4		// 
+Xz6 	an[3] a[2] a[1] an[0]  	z[6]	nand4		// 
+Xz7 	an[3] a[2] a[1] a[0]  	z[7]	nand4		// 
+Xz8 	a[3] an[2:0]      	z[8]	nand4		// 
+Xz9 	a[3] an[2:1] a[0]  	z[9]	nand4		// 
+Xz10 	a[3] an[2] a[1] an[0]  	z[10] 	nand4		// 
+Xz11 	a[3] an[2] a[1] a[0]  	z[11] 	nand4		// 
+Xz12 	a[3] a[2] an[1:0]	z[12] 	nand4		// 
+Xz13 	a[3] a[2] an[1] a[0]  	z[13]	nand4		// 
+Xz14 	a[3] a[2] a[1] an[0]  	z[14] 	nand4		// 
+Xz15 	a[3] a[2] a[1] a[0]  	z[15]	nand4		// 
+
+Xy	enn#16  z[15:0]		y[15:0]	nor2		//
+.ends
+
+
+***********************************
+* 5-to-32 decoder
+*----------------------------------
+.subckt dec5to32 en a[4:0] y[31:0]
+Xan 	a[4:0]  		an[4:0] inverter // inverting a[4:0]
+Xenn	en			enn	inverter // inverting en
+
+// decoding a[3:0] to zn[15:0] -- active-0 4-to-16 decoder
+
+Xz0 	an[3:0]      			zn[0] 	nand4		//
+
+Xz1 	an[3:1] a[0]  			zn[1]	nand4		// 
+
+Xz2 	an[3:2] a[1] an[0]		zn[2]	nand4		// 
+
+Xz3 	an[3:2] a[1] a[0]  		zn[3] 	nand4		// 
+
+Xz4 	an[3] a[2] an[1:0]		zn[4]	nand4		// 
+
+Xz5 	an[3] a[2] an[1] a[0] 		zn[5]	nand4		// 
+
+Xz6 	an[3] a[2] a[1] an[0] 		zn[6]	nand4		// 
+
+Xz7 	an[3] a[2] a[1] a[0] 		zn[7]	nand4		// 
+
+Xz8 	a[3] an[2:0] 			zn[8]	nand4		// 
+
+Xz9 	a[3] an[2:1] a[0] 		zn[9]	nand4		//  
+
+Xz10 	a[3] an[2] a[1] an[0] 		zn[10]	nand4		// 
+
+Xz11 	a[3] an[2] a[1] a[0] 		zn[11]	nand4		// 
+
+Xz12 	a[3] a[2] an[1:0] 		zn[12]	nand4		// 
+
+Xz13 	a[3] a[2] an[1] a[0] 		zn[13]	nand4		//  
+
+Xz14 	a[3] a[2] a[1] an[0] 		zn[14]	nand4		// 
+
+Xz15 	a[3:0]			  	zn[15]	nand4		// 
+
+Xy0to15	 enn#16 a[4]#16  zn[15:0]	y[15:0]  nor3		//
+
+Xy16to31 enn#16 an[4]#16 zn[15:0] 	y[31:16] nor3		//
+
+.ends

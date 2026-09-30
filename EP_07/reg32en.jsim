@@ -1,0 +1,16 @@
+// Comment out these two lines when using the module in larger module (e.g. rf32x32)
+//.include "./stdcell.jsim"
+//.include "./nominal.jsim"
+
+***********************************
+* 32-bit register with clock enable
+*----------------------------------
+.subckt reg32en en clk d[31:0] q[31:0]
+
+Xdx 	en#32 	   q[31:0] 	d[31:0] 	dx[31:0]	mux2
+
+Xqx 	dx[31:0]   clk#32 			qx[31:0]	dreg
+
+Xq 	qx[31:0] 				q[31:0]		knex
+
+.ends

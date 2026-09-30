@@ -1,0 +1,70 @@
+// Comment out these two lines when using the module in larger module (e.g. rf32x32)
+// .include "./stdcell.jsim"
+// .include "./nominal.jsim"
+
+***********************************
+* mux8: 1-bit 8-input mux
+*----------------------------------
+.subckt mux8 s0 s1 s2 
++ d0 d1 d2 d3 d4 d5 d6 d7 
++ y
+
+Xy0_3 	s0 s1 d0 d1 d2 d3 	y0_3	mux4
+Xy4_8 	s0 s1 d4 d5 d6 d7 	y4_7	mux4
+Xy 	s2 y0_3 y4_7 		y	mux2
+.ends
+
+***********************************
+* mux16: 1-bit 16-input mux
+*----------------------------------
+.subckt mux16 s0 s1 s2 s3 
++ d0 d1 d2 d3 d4 d5 d6 d7 
++ d8 d9 d10 d11 d12 d13 d14 d15	
++ y
+
+Xy0to3  s0 s1 d0 d1 d2 d3 	   y0to3	mux4
+Xy4to7  s0 s1 d4 d5 d6 d7	   y4to7	mux4
+Xy8to11 s0 s1 d8 d9 d10 d11    y8to11	mux4
+Xy12to15 s0 s1 d12 d13 d14 d15 y12to15	mux4
+Xy       s2 s3 y0to3 y4to7 y8to11 y12to15	y  mux4
+.ends
+
+***********************************
+* mux32: 1-bit 32-input mux
+*----------------------------------
+.subckt mux32 s0 s1 s2 s3 s4
++ d0 d1 d2 d3 d4 d5 d6 d7 
++ d8 d9 d10 d11 d12 d13 d14 d15
++ d16 d17 d18 d19 d20 d21 d22 d23 
++ d24 d25 d26 d27 d28 d29 d30 d31	
++ y
+
+//* Level 0
+
+Xy00  s0 s1	d0	d1 	d2 	d3 	d00	mux4
+
+Xy01  s0 s1	d4	d5 	d6 	d7 	d01	mux4
+
+Xy02  s0 s1	d8	d9 	d10 	d11 	d02	mux4
+
+Xy03  s0 s1	d12	d13 	d14 	d15 	d03	mux4
+
+Xy04  s0 s1	d16	d17 	d18 	d19 	d04	mux4
+
+Xy05  s0 s1	d20	d21 	d22 	d23 	d05	mux4
+
+Xy06  s0 s1	d24	d25 	d26 	d27 	d06	mux4
+
+Xy07  s0 s1	d28	d29 	d30 	d31 	d07	mux4
+
+//* Level 1
+
+Xy10  s2  s3	d00	d01 	d02 	d03 	y10	mux4
+
+Xy11  s2  s3	d04	d05 	d06 	d07 	y11	mux4
+
+//* Level 2
+
+Xy    s4 	y10 	y11	   		y	mux2
+
+.ends

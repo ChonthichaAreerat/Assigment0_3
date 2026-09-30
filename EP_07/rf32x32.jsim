@@ -1,0 +1,62 @@
+// Comment out these two lines when using the module in larger module (e.g. ubeta)
+.include "stdcell.jsim"
+.include "nominal.jsim"
+
+// include files with necessary sub-modules (reg1en, decoders, mux)
+.include "reg32en.jsim"
+.include "decoders.jsim"
+.include "muxs.jsim"
+***********************************
+* rf32x32: register file of 32 of 32-bit registers
+*----------------------------------
+.subckt rf32x32 clk werf ra1[4:0] ra2[4:0] wa[4:0] wd[31:0] rd1[31:0] rd2[31:0]
+
+Xdec 	werf 	  __________   en[31:0]    dec5to32
+Xrq00	en[0]  clk __________  ___________ reg32en
+Xrq01	en[1]  clk __________  ___________ reg32en
+Xrq02	en[2]  clk __________  ___________ reg32en
+Xrq03	en[3]  clk __________  ___________ reg32en
+Xrq04	en[4]  clk __________  rq04[31:0]  reg32en
+Xrq05	en[5]  clk __________  rq05[31:0]  reg32en
+Xrq06	en[6]  clk __________  ___________ reg32en
+Xrq07	en[7]  clk __________  ___________ reg32en
+Xrq08	en[8]  clk __________  ___________ reg32en
+Xrq09	en[9]  clk __________  ___________ reg32en
+Xrq10	en[10] clk __________  ___________ reg32en
+Xrq11	en[11] clk __________  ___________ reg32en
+Xrq12	en[12] clk __________  ___________ reg32en
+Xrq13	en[13] clk __________  ___________ reg32en
+Xrq14	en[14] clk __________  ___________ reg32en
+Xrq15	en[15] clk __________  ___________ reg32en
+Xrq16	en[16] clk __________  ___________ reg32en
+Xrq17	en[17] clk __________  ___________ reg32en
+Xrq18	en[18] clk __________  ___________ reg32en
+Xrq19	en[19] clk __________  ___________ reg32en
+Xrq20	en[20] clk __________  ___________ reg32en
+Xrq21	en[21] clk __________  ___________ reg32en
+Xrq22	en[22] clk __________  ___________ reg32en
+Xrq23	_____  clk wd[31:0]    ___________ reg32en
+Xrq24	_____  clk wd[31:0]    ___________ reg32en
+Xrq25	_____  clk wd[31:0]    ___________ reg32en
+Xrq26	_____  clk wd[31:0]    ___________ reg32en
+Xrq27	_____  clk wd[31:0]    ___________ reg32en
+Xrq28	_____  clk wd[31:0]    ___________ reg32en
+Xrq29	_____  clk wd[31:0]    ___________ reg32en
+Xr30	_____  clk wd[31:0]    ___________ reg32en
+Xrq31	gnd#32 		       rq31[31:0]  knex
+
+Xradat	ra1[0]#32 ra1[1]#32 ra1[2]#32 ra1[3]#32 ra1[4]#32
++  rq00[31:0] rq01[31:0] rq02[31:0] rq03[31:0] rq04[31:0] rq05[31:0] rq06[31:0] rq07[31:0]
++  rq08[31:0] rq09[31:0] rq10[31:0] rq11[31:0] rq12[31:0] rq13[31:0] rq14[31:0] rq15[31:0]
++  rq16[31:0] rq17[31:0] rq18[31:0] rq19[31:0] rq20[31:0] rq21[31:0] rq22[31:0] rq23[31:0]
++  rq24[31:0] rq25[31:0] rq26[31:0] rq27[31:0] rq28[31:0] rq29[31:0] rq30[31:0] rq31[31:0]
++				rd1[31:0]	mux32
+
+Xrbdat	ra2[0]#32 ra2[1]#32 ra2[2]#32 ra2[3]#32 ra2[4]#32 
++  rq00[31:0] rq01[31:0] rq02[31:0] rq03[31:0] rq04[31:0] rq05[31:0] rq06[31:0] rq07[31:0]
++  rq08[31:0] rq09[31:0] rq10[31:0] rq11[31:0] rq12[31:0] rq13[31:0] rq14[31:0] rq15[31:0]
++  rq16[31:0] rq17[31:0] rq18[31:0] rq19[31:0] rq20[31:0] rq21[31:0] rq22[31:0] rq23[31:0]
++  rq24[31:0] rq25[31:0] rq26[31:0] rq27[31:0] rq28[31:0] rq29[31:0] rq30[31:0] rq31[31:0]
++				rd2[31:0]	mux32
+.ends
+
