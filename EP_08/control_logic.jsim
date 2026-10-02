@@ -1,0 +1,127 @@
+// EP_08: Control Logic of Unpipelined Beta CPU
+// Name: Chonthicha Areerat
+// Student ID: 67070502472
+
+// Uncomment this 2 include files when using the module in larger module (e.g. ubeta)
+.include "stdcell.jsim"
+.include "nominal.jsim"
+
+.subckt control_logic OP[5:0] RESET IRQ Z ALUFN[5:0] ASEL BSEL MOE MWR PCSEL[2:0] RA2SEL WASEL WDSEL[1:0] WERF
+
+Xoprom 
++ vdd 0 0 OP[5:0] romd[15:0]		// (read only) ALUFN[5:0]...WERF, IllOp
++ $memory width=16 nlocations=64	// size
++ contents=(
+// alufn[5:0]_asel,bsel_moe,mwr_ra2sel_wasel,wdsel[1:0],werf_illpc
++ 0b0000000000010011  // 0b000000 ILLOP
++ 0b0000000000010011  // 0b000001 ILLOP
++ 0b0000000000010011  // 0b000010 ILLOP
++ 0b0000000000010011  // 0b000011 ILLOP
++ 0b0000000000010011  // 0b000100 ILLOP
++ 0b0000000000010011  // 0b000101 ILLOP
++ 0b0000000000010011  // 0b000110 ILLOP
++ 0b0000000000010011  // 0b000111 ILLOP
++ 
++ 0b0000000000010011  // 0b001000 ILLOP
++ 0b0000000000010011  // 0b001001 ILLOP
++ 0b0000000000010011  // 0b001010 ILLOP
++ 0b0000000000010011  // 0b001011 ILLOP
++ 0b0000000000010011  // 0b001100 ILLOP
++ 0b0000000000010011  // 0b001101 ILLOP
++ 0b0000000000010011  // 0b001110 ILLOP
++ 0b0000000000010011  // 0b001111 ILLOP
++ 
++ 0b0000000000010011  // 0b010000 ILLOP
++ 0b0000000000010011  // 0b010001 ILLOP
++ 0b0000000000010011  // 0b010010 ILLOP
++ 0b0000000000010011  // 0b010011 ILLOP
++ 0b0000000000010011  // 0b010100 ILLOP
++ 0b0000000000010011  // 0b010101 ILLOP
++ 0b0000000000010011  // 0b010110 ILLOP
++ 0b0000000000010011  // 0b010111 ILLOP
++
++ 0b0100000110001010  // 0b011000 LD
++ 0b0100000101100000  // 0b011001 ST
++ 0b0000000000010011  // 0b011010 ILLOP
++ 0b0000000000000010  // 0b011011 JMP
++ 0b0000000000010011  // 0b011100 ILLOP
++ 0b0000000000000010  // 0b011101 BEQ
++ 0b0000000000000010  // 0b011110 BNE
++ 0b1010101010001010  // 0b011111 LDR
++ 
++ 0b0100000000000110  // 0b100000 ADD
++ 0b0100010000000110  // 0b100001 SUB
++ 0b0000000000010011  // 0b100010 [normally MUL, but ILLOP for our CPU]
++ 0b0000000000010011  // 0b100011 [normally DIV, but ILOOP for our CPU]
++ 0b0000110000000110  // 0b100100 CMPEQ
++ 0b0001010000000110  // 0b100101 CMPLT
++ 0b0001110000000110  // 0b100110 CMPLE
++ 0b0000000000010011  // 0b100111 ILLOP
++ 
++ 0b1010000000000110  // 0b101000 AND
++ 0b1011100000000110  // 0b101001 OR
++ 0b1001100000000110  // 0b101010 XOR
++ 0b1010010000010011  // 0b101011 [normally XNOR, but ILLOP for our CPU]
++ 0b1100000000000110  // 0b101100 SHL
++ 0b1100010000000110  // 0b101101 SHR
++ 0b1100110000000110  // 0b101110 SRA
++ 0b0000000000010011  // 0b101111 ILLOP
++ 
++ 0b0100000100000110  // 0b110000 ADDC
++ 0b0100010100000110  // 0b110001 SUBC
++ 0b0000000000010011  // 0b110010 [normally MULC, but ILLOP for our CPU]
++ 0b0000000000010011  // 0b110011 [normally DIVC, but ILLOP for our CPU]
++ 0b0000110100000110  // 0b110100 CMPEQC
++ 0b0001010100000110  // 0b110101 CMPLTC
++ 0b0001110100000110  // 0b110110 CMPLEC
++ 0b0000000000010011  // 0b110111 ILLOP
++ 
++ 0b1010000100000110  // 0b111000 ANDC
++ 0b1011100100000110  // 0b111001 ORC
++ 0b1001100100000110  // 0b111010 XORC
++ 0b1010010100010011  // 0b111011 [normally XNORC, but ILLOP for our CPU] 
++ 0b1100000100000110  // 0b111100 SHLC
++ 0b1100010100000110  // 0b111101 SHRC
++ 0b1100110100000110  // 0b111110 SRAC
++ 0b0000000000010011  // 0b111111 ILLOP
++ )
+
+// Connecting the outputs
+Xalufn	romd[15:10] ALUFN[5:0] knex
+Xasel	romd[9] ASEL	knex
+Xbsel	romd[8] BSEL	knex
+Xmoe	romd[7] MOE	knex
+Xra2sel	romd[5] RA2SEL	knex
+
+// mwr, wasel, wdsel[1:0], werf are overwritten when IRQ=1
+// Xmwr	RESET IRQ romd[6] mwr	and3		// check whether or not reset or irq is active?
+Xmwrn	romd[6]		mwrn	inverter
+Xmwr	RESET IRQ mwrn	mwr	nor3
+Xwasel	IRQ romd[4] vdd WASEL mux2		// WASEL =1 if IRQ=1 else d[3]
+Xwdsel0 IRQ#2 romd[3:2] gnd#2 WDSEL[1:0] mux2	// WDSEL[1:0] =0b00 if IRQ=1 else d[2:1]
+Xwerf	IRQ romd[1] vdd WERF	mux2		// WERF=1 if IRQ=1 else d[0]
+
+// pcsel[2:0] are selected based on IRQ, Z, JMP and branch commands (BEQ or BNE)
+// JMP => op[5:0] = 0b011011
+// BEQ => op[5:0] = 0b011101
+// BNE => op[5:0] = 0b011110
+Xopinv	op[5:0] 	opn[5:0] inverter
+Xzn	Z		Zn	 inverter
+Xirqn	IRQ		irqn	 inverter
+// generating pcsel[0]
+Xisjb  	opn[5] op[4:3] 	   	   is_jbn   nand3
+Xisbeq  is_jbn opn[2]  op[1] opn[0] is_beq  nor4
+Xisbne  is_jbn opn[2]  opn[1] op[0] is_bne  nor4
+Xbbeq  	is_beq  Z      irqn        bbeq	    nand3
+Xbbne  	is_bne  Zn      irqn       bbne	    nand3
+Xill0  	romd[0]      	irqn       illop0   nand2
+Xpcs0	bbeq   bbne  	illop0     pcsel[0] nand3
+// generating pcsel[1]
+Xisj  	is_jbn  op[2] opn[1] opn[0]  is_j     nor4
+Xjill	is_j   	     romd[0]   	     is_jill  nor2
+Xpcs1	is_jill      irq   	     pcsel[1] nor2
+// generating pcsel[2]
+Xpcs2	irq	pcsel[2]	knex
+
+//Xdebug is_jb is_beq is_bne illop0 is_j is_jill debug[5:0]	knex
+.ends

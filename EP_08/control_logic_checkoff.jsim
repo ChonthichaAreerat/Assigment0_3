@@ -1,0 +1,645 @@
+//* Include the file with the module unter test
+.include "control_logic.jsim"
+
+//* Checkoff header
+.checkoff "" "Beta CPU: control" 0
+
+// 1. Instantiate the MUT
+Xbetactrl id[31:26] RESET IRQ Z ALUFN[5:0] ASEL BSEL MOE MWR PCSEL[2:0] RA2SEL WASEL WDSEL[1:0] WERF control_logic
+
+
+// 2. Setting up the input
+// 2.1 setting reset, irq, and z with reference to clk
+
+Vclk clk 0 pulse(3.3,0,49.9ns,.1ns,.1ns,49.9ns,100ns)
+Vreset reset 0 pwl(0ns 3.3v, 301ns 3.3v, 301.1ns 0v)
+Virq irq 0 pwl(0ns 0v, 201ns 0v,
++ 201.1ns 3.3v,
++ 601ns 3.3v,
++ 601.1ns 0v
++)
+Vz z 0 pwl(0ns 0v, 3701ns 0v,
++ 3701.1ns 3.3v,
++ 3901ns 3.3v,
++ 3901.1ns 0v
++)
+
+// 2.2 the 6-bit opcode
+Wid id[31:26] nrz(0,3.3,100n,0n,.1n,.1n)
+// test reset
++ 0x08 0x18 0x28 0x38
+// test interrupt
++ 0x19 0x29
+// test all cases of the opcode
++ 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x09 0x0A 0x0B 0x0C 0x0D 0x0E 0x0F
++ 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 
++ 0x1D 0x1E 0x1D 0x1E // repeat BEQ and BNE for testing with Z flag
++ 0x1F
++ 0x20 0x21 0x22 0x23 0x24 0x25 0x26 0x27 0x28 0x29 0x2A 0x2B 0x2C 0x2D 0x2E 0x2F
++ 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3A 0x3B 0x3C 0x3D 0x3E 0x3F
+
+// 3. Verifying the results
+// 3.1 PCSEL[2:0]
+.verify pcsel[2:0] tvpairs()
+// + 99ns         // reset, don't care
+// + 199ns        // reset, don't care
+// + 299ns       // IRQ and reset, don't care
++ 399ns 0b100       // IRQ
++ 499ns 0b100       // IRQ
++ 599ns 0b100       // IRQ
++ 
++ 699ns 0b011       // IllOp
++ 799ns 0b011       // IllOp
++ 899ns 0b011       // IllOp
++ 999ns 0b011       // IllOp
++ 1099ns 0b011       // IllOp
++ 1199ns 0b011       // IllOp
++ 1299ns 0b011       // IllOp
++ 1399ns 0b011       // IllOp
++ 
++ 1499ns 0b011       // IllOp
++ 1599ns 0b011       // IllOp
++ 1699ns 0b011       // IllOp
++ 1799ns 0b011       // IllOp
++ 1899ns 0b011       // IllOp
++ 1999ns 0b011       // IllOp
++ 2099ns 0b011       // IllOp
++ 2199ns 0b011       // IllOp
++ 
++ 2299ns 0b011       // IllOp
++ 2399ns 0b011       // IllOp
++ 2499ns 0b011       // IllOp
++ 2599ns 0b011       // IllOp
++ 2699ns 0b011       // IllOp
++ 2799ns 0b011       // IllOp
++ 2899ns 0b011       // IllOp
++ 2999ns 0b011       // IllOp
++ 
+// test each case of valid opcode
++ 3099ns 0b000   // LD
++ 3199ns 0b000   // ST
++ 3299ns 0b011   // IllOp
++ 3399ns 0b010   // JMP
++ 3499ns 0b011   // IllOp
++ 3599ns 0b000   // BEQ, z=0
++ 3699ns 0b001   // BNE, z=0
++ 3799ns 0b001   // BEQ, z=1
++ 3899ns 0b000   // BNE, z=1
++ 3999ns 0b000   // LDR
++ 4099ns 0b000   // ADD
++ 4199ns 0b000   // SUB
++ 4299ns 0b011   // MUL-->IllOp
++ 4399ns 0b011   // DIV-->IllOp
++ 4499ns 0b000   // CMPEQ
++ 4599ns 0b000   // CMPLT
++ 4699ns 0b000   // CMPLE
++ 4799ns 0b011   // IllOp
++ 4899ns 0b000   // AND
++ 4999ns 0b000   // OR
++ 5099ns 0b000   // XOR
++ 5199ns 0b011   // XNOR-->IllOp
++ 5299ns 0b000   // SHL
++ 5399ns 0b000   // SRR
++ 5499ns 0b000   // SRA
++ 5599ns 0b011   // IllOp
++ 5699ns 0b000   // ADDC
++ 5799ns 0b000   // SUBC
++ 5899ns 0b011   // MULC-->IllOp
++ 5999ns 0b011   // DIVC-->IllOp
++ 6099ns 0b000   // CMPEQC
++ 6199ns 0b000   // CMPLTC
++ 6299ns 0b000   // CMPLEC
++ 6399ns 0b011   // IllOp
++ 6499ns 0b000   // ANDC
++ 6599ns 0b000   // ORC
++ 6699ns 0b000   // XORC
++ 6799ns 0b011   // XNORC-->IllOp (0b000->0b011)
++ 6899ns 0b000   // SHLC
++ 6999ns 0b000   // SRRC
++ 7099ns 0b000   // SRAC
++ 7199ns 0b011   // IllOp
+
+// 3.2 ALUFN[5:0]
+.verify alufn[5:0] tvpairs()
+// + 99ns to 199ns    // test reset, don't care
+// + 199ns to 599     // test IRQ, don't care
+// + 699ns to 2999ns  // IllOp, don't care
+
+// test each case of valid opcode
++ 3099ns 0b010000   // LD --> ADD
++ 3199ns 0b010000   // ST --> ADD
+// + 3299ns    // IllOp, don't care
+// + 3399ns    // JMP, don't care
+// + 3499ns    // IllOp, don't care
+// + 3599ns    // BEQ, z=0, don't care
+// + 3699ns    // BNE, z=0, don't care
+// + 3799ns    // BEQ, z=1, don't care
+// + 3899ns    // BNE, z=1, don't care
++ 3999ns 0b101010   // LDR-> "A" 
++
++ 4099ns 0b010000   // ADD
++ 4199ns 0b010001   // SUB
++ 4299ns    // MUL-->IllOp, don't care
++ 4399ns    // DIV-->IllOp, don't care
++ 4499ns 0b000011   // CMPEQ
++ 4599ns 0b000101   // CMPLT
++ 4699ns 0b000111   // CMPLE
+// + 4799ns    // IllOp, don't care
++ 4899ns 0b101000   // AND
++ 4999ns 0b101110   // OR
++ 5099ns 0b100110   // XOR
++ 5199ns 0b101001   // XNOR
++ 5299ns 0b110000   // SHL
++ 5399ns 0b110001   // SRR
++ 5499ns 0b110011   // SRA
+// + 5599ns    // IllOp, don't care
++ 5699ns 0b010000   // ADDC
++ 5799ns 0b010001   // SUBC
+// + 5899ns    // MULC-->IllOp
+// + 5999ns    // DIVC-->IllOp
++ 6099ns 0b000011   // CMPEQC
++ 6199ns 0b000101   // CMPLTC
++ 6299ns 0b000111   // CMPLEC
+// + 6399ns    // IllOp, don't care
++ 6499ns 0b101000   // ANDC
++ 6599ns 0b101110   // ORC
++ 6699ns 0b100110   // XORC
++ 6799ns 0b101001   // XNORC
++ 6899ns 0b110000   // SHLC
++ 6999ns 0b110001   // SRRC
++ 7099ns 0b110011   // SRAC
+// + 7199ns    // IllOp, don't care
+
+// 3.3 ASEL
+.verify asel tvpairs()
+// 99n to 2999 // reset test, irq test, IllOp, don't care
+// test each case of valid opcode
++ 3099ns 0   // LD 
++ 3199ns 0   // ST 
+// + 3299ns    // IllOp, don't care
+// + 3399ns    // JMP, don't care
+// + 3499ns    // IllOp, don't care
+// + 3599ns    // BEQ, z=0, don't care
+// + 3699ns    // BNE, z=0, don't care
+// + 3799ns    // BEQ, z=1, don't care
+// + 3899ns    // BNE, z=1, don't care
++ 3999ns 1   // LDR-> "A" 
++
++ 4099ns 0   // ADD
++ 4199ns 0   // SUB
+// + 4299ns    // MUL-->IllOp, don't care
+// + 4399ns    // DIV-->IllOp, don't care
++ 4499ns 0   // CMPEQ
++ 4599ns 0   // CMPLT
++ 4699ns 0   // CMPLE
+// + 4799ns    // IllOp, don't care
++ 4899ns 0   // AND
++ 4999ns 0   // OR
++ 5099ns 0   // XOR
++ 5199ns 0   // XNOR
++ 5299ns 0   // SHL
++ 5399ns 0   // SRR
++ 5499ns 0   // SRA
+// + 5599ns    // IllOp, don't care
++ 5699ns 0   // ADDC
++ 5799ns 0   // SUBC
+// + 5899ns    // MULC-->IllOp
+// + 5999ns    // DIVC-->IllOp
++ 6099ns 0   // CMPEQC
++ 6199ns 0   // CMPLTC
++ 6299ns 0   // CMPLEC
+// + 6399ns    // IllOp, don't care
++ 6499ns 0   // ANDC
++ 6599ns 0   // ORC
++ 6699ns 0   // XORC
++ 6799ns 0   // XNORC
++ 6899ns 0   // SHLC
++ 6999ns 0   // SRRC
++ 7099ns 0   // SRAC
+// + 7199ns    // IllOp, don't care
+
+// 3.4 BSEL
+.verify bsel tvpairs()
+// 99n to 2999 // reset test, irq test, IllOp, don't care
+// test each case of valid opcode
++ 3099ns 1   // LD 
++ 3199ns 1   // ST 
+// + 3299ns    // IllOp, don't care
+// + 3399ns    // JMP, don't care
+// + 3499ns    // IllOp, don't care
+// + 3599ns    // BEQ, z=0, don't care
+// + 3699ns    // BNE, z=0, don't care
+// + 3799ns    // BEQ, z=1, don't care
+// + 3899ns    // BNE, z=1, don't care
+// + 3999ns   // LDR, don't care
++
++ 4099ns 0   // ADD
++ 4199ns 0   // SUB
+// + 4299ns    // MUL-->IllOp, don't care
+// + 4399ns    // DIV-->IllOp, don't care
++ 4499ns 0   // CMPEQ
++ 4599ns 0   // CMPLT
++ 4699ns 0   // CMPLE
+// + 4799ns    // IllOp, don't care
++ 4899ns 0   // AND
++ 4999ns 0   // OR
++ 5099ns 0   // XOR
++ 5199ns 0   // XNOR
++ 5299ns 0   // SHL
++ 5399ns 0   // SRR
++ 5499ns 0   // SRA
+// + 5599ns    // IllOp, don't care
++ 5699ns 1   // ADDC
++ 5799ns 1   // SUBC
+// + 5899ns    // MULC-->IllOp
+// + 5999ns    // DIVC-->IllOp
++ 6099ns 1   // CMPEQC
++ 6199ns 1   // CMPLTC
++ 6299ns 1   // CMPLEC
+// + 6399ns    // IllOp, don't care
++ 6499ns 1   // ANDC
++ 6599ns 1   // ORC
++ 6699ns 1   // XORC
++ 6799ns 1   // XNORC
++ 6899ns 1   // SHLC
++ 6999ns 1   // SRRC
++ 7099ns 1   // SRAC
+// + 7199ns    // IllOp, don't care
+
+// 3.5 MOE
+.verify moe tvpairs()
+// 99n to 2999 // reset test, irq test, IllOp, don't care
+// test each case of valid opcode
++ 3099ns 1   // LD 
++ 3199ns 0   // ST 
++ 3999ns 1   // LDR
+// +           // Other instructions, don't care
+
+// 3.6 MWR
+.verify mwr tvpairs()
++ 99ns  0       // reset
++ 199ns 0       // reset
++ 299ns 0       // IRQ
++ 399ns 0       // IRQ
++ 499ns 0       // IRQ
++ 599ns 0       // IRQ
++ 
++ 699ns 0       // IllOp
++ 799ns 0       // IllOp
++ 899ns 0       // IllOp
++ 999ns 0       // IllOp
++ 1099ns 0       // IllOp
++ 1199ns 0       // IllOp
++ 1299ns 0       // IllOp
++ 1399ns 0       // IllOp
++ 
++ 1499ns 0       // IllOp
++ 1599ns 0       // IllOp
++ 1699ns 0       // IllOp
++ 1799ns 0       // IllOp
++ 1899ns 0       // IllOp
++ 1999ns 0       // IllOp
++ 2099ns 0       // IllOp
++ 2199ns 0       // IllOp
++ 
++ 2299ns 0       // IllOp
++ 2399ns 0       // IllOp
++ 2499ns 0       // IllOp
++ 2599ns 0       // IllOp
++ 2699ns 0       // IllOp
++ 2799ns 0       // IllOp
++ 2899ns 0       // IllOp
++ 2999ns 0       // IllOp
++ 
+// test each case of valid opcode
++ 3099ns 0   // LD
++ 3199ns 1   // ST
++ 3299ns 0   // IllOp
++ 3399ns 0   // JMP
++ 3499ns 0   // IllOp
++ 3599ns 0   // BEQ, z=0
++ 3699ns 0   // BNE, z=0
++ 3799ns 0   // BEQ, z=1
++ 3899ns 0   // BNE, z=1
++ 3999ns 0   // LDR
++ 4099ns 0   // ADD
++ 4199ns 0   // SUB
++ 4299ns 0   // MUL-->IllOp
++ 4399ns 0   // DIV-->IllOp
++ 4499ns 0   // CMPEQ
++ 4599ns 0   // CMPLT
++ 4699ns 0   // CMPLE
++ 4799ns 0   // IllOp
++ 4899ns 0   // AND
++ 4999ns 0   // OR
++ 5099ns 0   // XOR
++ 5199ns 0   // XNOR-->IllOp
++ 5299ns 0   // SHL
++ 5399ns 0   // SRR
++ 5499ns 0   // SRA
++ 5599ns 0   // IllOp
++ 5699ns 0   // ADDC
++ 5799ns 0   // SUBC
++ 5899ns 0   // MULC-->IllOp
++ 5999ns 0   // DIVC-->IllOp
++ 6099ns 0   // CMPEQC
++ 6199ns 0   // CMPLTC
++ 6299ns 0   // CMPLEC
++ 6399ns 0   // IllOp
++ 6499ns 0   // ANDC
++ 6599ns 0   // ORC
++ 6699ns 0   // XORC
++ 6799ns 0   // XNORC-->IllOp
++ 6899ns 0   // SHLC
++ 6999ns 0   // SRRC
++ 7099ns 0   // SRAC
++ 7199ns 0   // IllOp
+
+// 3.7 RA2SEL
+.verify ra2sel tvpairs()
++ 3199ns 1   // ST
+// OP
++ 4099ns 0   // ADD
++ 4199ns 0   // SUB
+// + 4299ns    // MUL-->IllOp, don't care
+// + 4399ns    // DIV-->IllOp, don't care
++ 4499ns 0   // CMPEQ
++ 4599ns 0   // CMPLT
++ 4699ns 0   // CMPLE
+// + 4799ns    // IllOp, don't care
++ 4899ns 0   // AND
++ 4999ns 0   // OR
++ 5099ns 0   // XOR
++ 5199ns 0   // XNOR
++ 5299ns 0   // SHL
++ 5399ns 0   // SRR
++ 5499ns 0   // SRA
+// +     // Other instructions, don't care
+
+// 3.8 WASEL
+.verify wasel tvpairs()
+// + 99ns  0       // reset
+// + 199ns 0       // reset
+// + 299ns 0       // reset, IRQ
++ 399ns 1       // IRQ
++ 499ns 1       // IRQ
++ 599ns 1       // IRQ
++ 
++ 699ns 1       // IllOp
++ 799ns 1       // IllOp
++ 899ns 1       // IllOp
++ 999ns 1       // IllOp
++ 1099ns 1       // IllOp
++ 1199ns 1       // IllOp
++ 1299ns 1       // IllOp
++ 1399ns 1       // IllOp
++ 
++ 1499ns 1       // IllOp
++ 1599ns 1       // IllOp
++ 1699ns 1       // IllOp
++ 1799ns 1       // IllOp
++ 1899ns 1       // IllOp
++ 1999ns 1       // IllOp
++ 2099ns 1       // IllOp
++ 2199ns 1       // IllOp
++ 
++ 2299ns 1       // IllOp
++ 2399ns 1       // IllOp
++ 2499ns 1       // IllOp
++ 2599ns 1       // IllOp
++ 2699ns 1       // IllOp
++ 2799ns 1       // IllOp
++ 2899ns 1       // IllOp
++ 2999ns 1       // IllOp
++ 
+// test each case of valid opcode
++ 3099ns 0   // LD
+// + 3199ns 1   // ST, don't care
++ 3299ns 1   // IllOp
++ 3399ns 0   // JMP
++ 3499ns 1   // IllOp
++ 3599ns 0   // BEQ, z=0
++ 3699ns 0   // BNE, z=0
++ 3799ns 0   // BEQ, z=1
++ 3899ns 0   // BNE, z=1
++ 3999ns 0   // LDR
+// OP
++ 4099ns 0   // ADD
++ 4199ns 0   // SUB
++ 4299ns 1   // MUL-->IllOp
++ 4399ns 1   // DIV-->IllOp
++ 4499ns 0   // CMPEQ
++ 4599ns 0   // CMPLT
++ 4699ns 0   // CMPLE
++ 4799ns 1   // IllOp
++ 4899ns 0   // AND
++ 4999ns 0   // OR
++ 5099ns 0   // XOR
++ 5199ns 1   // XNOR-->IllOp (0-->1)
++ 5299ns 0   // SHL
++ 5399ns 0   // SRR
++ 5499ns 0   // SRA
++ 5599ns 1   // IllOp
+// OPC
++ 5699ns 0   // ADDC
++ 5799ns 0   // SUBC
++ 5899ns 1   // MULC-->IllOp
++ 5999ns 1   // DIVC-->IllOp
++ 6099ns 0   // CMPEQC
++ 6199ns 0   // CMPLTC
++ 6299ns 0   // CMPLEC
++ 6399ns 1   // IllOp
++ 6499ns 0   // ANDC
++ 6599ns 0   // ORC
++ 6699ns 0   // XORC
++ 6799ns 1   // XNORC-->IIllOp (0-->1)
++ 6899ns 0   // SHLC
++ 6999ns 0   // SRRC
++ 7099ns 0   // SRAC
++ 7199ns 1   // IllOp
+
+// 3.9 WDSEL[1:0]
+.verify wdsel[1:0] tvpairs()
+// + 99ns  0       // reset
+// + 199ns 0       // reset
+// + 299ns 0       // reset, IRQ
++ 399ns 0       // IRQ
++ 499ns 0       // IRQ
++ 599ns 0       // IRQ
++ 
++ 699ns 0       // IllOp
++ 799ns 0       // IllOp
++ 899ns 0       // IllOp
++ 999ns 0       // IllOp
++ 1099ns 0       // IllOp
++ 1199ns 0       // IllOp
++ 1299ns 0       // IllOp
++ 1399ns 0       // IllOp
++ 
++ 1499ns 0       // IllOp
++ 1599ns 0       // IllOp
++ 1699ns 0       // IllOp
++ 1799ns 0       // IllOp
++ 1899ns 0       // IllOp
++ 1999ns 0       // IllOp
++ 2099ns 0       // IllOp
++ 2199ns 0       // IllOp
++ 
++ 2299ns 0       // IllOp
++ 2399ns 0       // IllOp
++ 2499ns 0       // IllOp
++ 2599ns 0       // IllOp
++ 2699ns 0       // IllOp
++ 2799ns 0       // IllOp
++ 2899ns 0       // IllOp
++ 2999ns 0       // IllOp
++ 
+// test each case of valid opcode
++ 3099ns 2   // LD
+// + 3199ns   // ST, don't care
++ 3299ns 0   // IllOp
++ 3399ns 0   // JMP
++ 3499ns 0   // IllOp
++ 3599ns 0   // BEQ, z=0
++ 3699ns 0   // BNE, z=0
++ 3799ns 0   // BEQ, z=1
++ 3899ns 0   // BNE, z=1
++ 3999ns 2   // LDR
+// OP
++ 4099ns 1   // ADD
++ 4199ns 1   // SUB
++ 4299ns 0   // MUL-->IllOp
++ 4399ns 0   // DIV-->IllOp
++ 4499ns 1   // CMPEQ
++ 4599ns 1   // CMPLT
++ 4699ns 1   // CMPLE
++ 4799ns 0   // IllOp
++ 4899ns 1   // AND
++ 4999ns 1   // OR
++ 5099ns 1   // XOR
++ 5199ns 0   // XNOR-->IllOp(1-->0)
++ 5299ns 1   // SHL
++ 5399ns 1   // SRR
++ 5499ns 1   // SRA
++ 5599ns 0   // IllOp
+// OPC
++ 5699ns 1   // ADDC
++ 5799ns 1   // SUBC
++ 5899ns 0   // MULC-->IllOp
++ 5999ns 0   // DIVC-->IllOp
++ 6099ns 1   // CMPEQC
++ 6199ns 1   // CMPLTC
++ 6299ns 1   // CMPLEC
++ 6399ns 0   // IllOp
++ 6499ns 1   // ANDC
++ 6599ns 1   // ORC
++ 6699ns 1   // XORC
++ 6799ns 0   // XNORC -->IllOp (1-->0)
++ 6899ns 1   // SHLC
++ 6999ns 1   // SRRC
++ 7099ns 1   // SRAC
++ 7199ns 0   // IllOp
+
+// 3.10 WERF
+.verify werf tvpairs()
+// + 99ns  0       // reset
+// + 199ns 0       // reset
+// + 299ns 0       // reset, IRQ
++ 399ns 1       // IRQ
++ 499ns 1       // IRQ
++ 599ns 1       // IRQ
++ 
++ 699ns 1       // IllOp
++ 799ns 1       // IllOp
++ 899ns 1       // IllOp
++ 999ns 1       // IllOp
++ 1099ns 1       // IllOp
++ 1199ns 1       // IllOp
++ 1299ns 1       // IllOp
++ 1399ns 1       // IllOp
++ 
++ 1499ns 1       // IllOp
++ 1599ns 1       // IllOp
++ 1699ns 1       // IllOp
++ 1799ns 1       // IllOp
++ 1899ns 1       // IllOp
++ 1999ns 1       // IllOp
++ 2099ns 1       // IllOp
++ 2199ns 1       // IllOp
++ 
++ 2299ns 1       // IllOp
++ 2399ns 1       // IllOp
++ 2499ns 1       // IllOp
++ 2599ns 1       // IllOp
++ 2699ns 1       // IllOp
++ 2799ns 1       // IllOp
++ 2899ns 1       // IllOp
++ 2999ns 1       // IllOp
++ 
+// test each case of valid opcode
++ 3099ns 1   // LD
++ 3199ns 0   // ST, don't care
++ 3299ns 1   // IllOp
++ 3399ns 1   // JMP
++ 3499ns 1   // IllOp
++ 3599ns 1   // BEQ, z=0
++ 3699ns 1   // BNE, z=0
++ 3799ns 1   // BEQ, z=1
++ 3899ns 1   // BNE, z=1
++ 3999ns 1   // LDR
+// OP
++ 4099ns 1   // ADD
++ 4199ns 1   // SUB
++ 4299ns 1   // MUL-->IllOp
++ 4399ns 1   // DIV-->IllOp
++ 4499ns 1   // CMPEQ
++ 4599ns 1   // CMPLT
++ 4699ns 1   // CMPLE
++ 4799ns 1   // IllOp
++ 4899ns 1   // AND
++ 4999ns 1   // OR
++ 5099ns 1   // XOR
++ 5199ns 1   // XNOR
++ 5299ns 1   // SHL
++ 5399ns 1   // SRR
++ 5499ns 1   // SRA
++ 5599ns 1   // IllOp
+// OPC
++ 5699ns 1   // ADDC
++ 5799ns 1   // SUBC
++ 5899ns 1   // MULC-->IllOp
++ 5999ns 1   // DIVC-->IllOp
++ 6099ns 1   // CMPEQC
++ 6199ns 1   // CMPLTC
++ 6299ns 1   // CMPLEC
++ 6399ns 1   // IllOp
++ 6499ns 1   // ANDC
++ 6599ns 1   // ORC
++ 6699ns 1   // XORC
++ 6799ns 1   // XNORC
++ 6899ns 1   // SHLC
++ 6999ns 1   // SRRC
++ 7099ns 1   // SRAC
++ 7199ns 1   // IllOp
+
+// Run the simulation
+.tran 7200ns
+
+// Some useful plots... you can plot additional signals by specifying
+// the appropriate .plot commands in your main netlist file.
+
+.plot clk
+.plot reset
+.plot z
+.plot irq
+.plot betaop(id[31:26])
+.plot b(id[31:26])
+.plot d(pcsel[2:0])
+.plot ra2sel
+.plot bsel
+.plot alufn[5:0]
+.plot wasel
+.plot wdsel[1:0]
+.plot werf
+.plot moe
+.plot mwr

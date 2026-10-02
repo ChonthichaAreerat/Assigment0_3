@@ -1,0 +1,50 @@
+Timing analysis for C:\ene232\EP_08\EP08_Control_JSIM\EP08_Control_JSIM\control_logic_checkoff.jsim at Fri Oct 02 19:11:56 ICT 2026
+
+==================================================================
+
+Worst-case tPDs for top-level combinational paths
+
+  tPD from id31 to pcsel1 (2.135ns):
+
+    + 0.000ns = 0.000ns id31 [wid#0]
+    + 2.008ns = 2.008ns xbetactrl.romd0%0 [xbetactrl.xoprom]
+    + 0.077ns = 2.085ns xbetactrl.is_jill [xbetactrl.xjill.xnor2]
+    + 0.050ns = 2.135ns pcsel1 [xbetactrl.xpcs1.xnor2]
+
+  tPD from id31 to werf (2.125ns):
+
+    + 0.000ns = 0.000ns id31 [wid#0]
+    + 2.005ns = 2.005ns xbetactrl.romd1%0 [xbetactrl.xoprom]
+    + 0.120ns = 2.125ns werf [xbetactrl.xwerf.xmux2]
+
+  tPD from id31 to wdsel0 (2.125ns):
+
+    + 0.000ns = 0.000ns id31 [wid#0]
+    + 2.005ns = 2.005ns xbetactrl.romd2%0 [xbetactrl.xoprom]
+    + 0.120ns = 2.125ns wdsel0 [xbetactrl.xwdsel0#1.xmux2]
+
+  tPD from id31 to wdsel1 (2.125ns):
+
+    + 0.000ns = 0.000ns id31 [wid#0]
+    + 2.005ns = 2.005ns xbetactrl.romd3%0 [xbetactrl.xoprom]
+    + 0.120ns = 2.125ns wdsel1 [xbetactrl.xwdsel0#0.xmux2]
+
+  tPD from id31 to wasel (2.125ns):
+
+    + 0.000ns = 0.000ns id31 [wid#0]
+    + 2.005ns = 2.005ns xbetactrl.romd4%0 [xbetactrl.xoprom]
+    + 0.120ns = 2.125ns wasel [xbetactrl.xwasel.xmux2]
+
+  tPD from id31 to mwr (2.119ns):
+
+    + 0.000ns = 0.000ns id31 [wid#0]
+    + 2.007ns = 2.007ns xbetactrl.romd6%0 [xbetactrl.xoprom]
+    + 0.032ns = 2.039ns xbetactrl.mwrn [xbetactrl.xmwrn.xinverter]
+    + 0.080ns = 2.119ns mwr [xbetactrl.xmwr.xnor3]
+
+  tPD from id31 to pcsel0 (2.111ns):
+
+    + 0.000ns = 0.000ns id31 [wid#0]
+    + 2.008ns = 2.008ns xbetactrl.romd0%0 [xbetactrl.xoprom]
+    + 0.053ns = 2.061ns xbetactrl.illop0 [xbetactrl.xill0.xnand2]
+    + 0.050ns = 2.111ns pcsel0 [xbetactrl.xpcs0.xnand3]
